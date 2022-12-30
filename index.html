@@ -12,9 +12,60 @@
 <link rel="stylesheet" href="./css/style.css">
 
 <!-- Scripts -->
+<form>
+    <div class="formBox">
+        <input type="number" id="value" placeholder="Value"/>
+    </div>
+    <div class="formBox">
+        <input type="text" id="description" placeholder="Description"/>
+    </div>
+    <div class="formBox">
+        <input type="date" id="date" placeholder="Date"/>
+    </div>
+    <div class="formBox">
+        <input type="text" id="category" placeholder="Category"/>
+    </div>
+    
 
-<script defer src="./js/script.js"></script>
+    <div class="formBox">
+        <button id="btn">Click to Add</button>
+    </div>
+    <div id="msg">
+        <pre></pre>
+    </div>
+</form>
 
+<script>
+        let contas = [];
+
+        const addExpense = (ev)=>{
+            ev.preventDefault(); 
+            let conta = {
+                id: Date.now(),
+                value: document.getElementById("value").value,
+                description: document.getElementById("description").value,
+                date: document.getElementById("date").value,
+                category: document.getElementById("category").value 
+            }
+            contas.push(conta);
+            document.forms[0].reset(); 
+            document.querySelector('form').reset();
+
+            console.warn('added' , {contas} );
+            let pre = document.querySelector('#msg pre');
+            pre.textContent = '\n' + JSON.stringify(contas, '\t', 2);
+
+            // Salvar no armazenamento local
+            localStorage.setItem('Contas', JSON.stringify(contas) );
+        }
+        document.addEventListener('DOMContentLoaded', ()=>{
+            document.getElementById('btn').addEventListener('click', addExpense);
+        });
+    </script>
+</body>
+</html>
+
+</script>
 <!-- Page Title -->
 
 <title>CONTROLE DE FINANCAS</title>
@@ -33,11 +84,6 @@
         </thead>
         <tbody>
             <tr>
-                <td><input type="number" id="value" placeholder="Value"></td>
-                <td><input type="text" id="description" placeholder="Description"></td>
-                <td><input type="date" id="date" placeholder="Date"></td>
-                <td><input type="text" id="category" placeholder="Category"></td>
-                <td><button type="button" onclick="addObj()">Add</button></td>
 
                     <script type="text/javascript">
 
