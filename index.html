@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<!-- Links -->
+
+<link rel="icon" href="./favicons/icon-16x16.png">
+<link rel="stylesheet" href="./css/style.css">
+
+<!-- Scripts -->
+
+<script defer src="./js/script.js"></script>
+
+<!-- Page Title -->
+
+<title>CONTROLE DE FINANCAS</title>
+
+<!-- Inserir nova despesa -->
+    <table id="inputTable">
+        <thead>
+            <tr>
+                <th>Value</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Category</th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="number" id="value" placeholder="Value"></td>
+                <td><input type="text" id="description" placeholder="Description"></td>
+                <td><input type="date" id="date" placeholder="Date"></td>
+                <td><input type="text" id="category" placeholder="Category"></td>
+                <td><button type="button" onclick="addObj()">Add</button></td>
+
+                    <script type="text/javascript">
+
+                        function addObj() {
+                            
+                            let data = JSON.stringify(atual); 
+                            let atual = JSON.parse(data); 
+                            let newObj = {
+                                value: document.getElementById("value").value,
+                                description: document.getElementById("description").value,
+                                date: document.getElementById("date").value,
+                                category: document.getElementById("category").value 
+                            };
+                            if (newObj.value == "" || newObj.description == "" || newObj.date == "" || newObj.category == "") {
+                                alert("Please fill all the fields");
+                                return;
+                            }
+                            if (localStorage.getItem("data") == null) {
+                                let data = [];
+                                data.push(newObj);
+                                localStorage.setItem("data", JSON.stringify(data));
+                                return;
+                            }
+                            
+                            
+                            
+                            atual.push(newObj); 
+                            console.log(atual) 
+
+                            
+
+                        }
+                </script>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Table -->
+    <table>
+        <thead>
+            <!-- Topics -->
+            <tr> 
+                <th>Value</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+        <tbody id="data-output"> <!-- Target from de js file-->
+            <h2>JSON DATA</h2>
+            <p id="data"></p>
+            <script type="text/javascript">
+                fetch('./data.json')
+                .then(function(response) {
+                    return response.json()
+                }) 
+                .then(function(data) {
+                    for (var i = 0; i < data.length; i++) {
+                        document.getElementById("data").innerHTML += 
+                        data[i].id + "=>" + data[i].value + " " + data[i].description + " " 
+                        + data[i].date + " " + data[i].category + "<br />"
+                    }
+                })
+
+
+
+            </script>
+        </tbody>
+
+
+            </h2>
+
+        </tbody>
+
+    </table>
+
+    <script src="script.js"></script>
