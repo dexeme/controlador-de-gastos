@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- Config -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,167 +13,115 @@
 <link rel="icon" href="./favicons/icon-16x16.png">
 <link rel="stylesheet" href="./css/style.css">
 
-
-
-<!-- Categorias -->
-
-<form action="">
-        <div class="checkbox">
-            <input type="checkbox" id="food" name="food" value="food">
-            <label for="food">Food</label>
-            
-            <input type="checkbox" id="transport" name="transport" value="transport">
-            <label for="transport">Transport</label>
-
-            <input type="checkbox" id="health" name="health" value="health">
-            <label for="health">Health</label>
-
-            <input type="checkbox" id="education" name="education" value="education">
-            <label for="education">Education</label>
-
-
-
-        </div>
-</form>
-
-<!-- Inserir nova despesa -->
-
-<form>
-    <div class="formBox">
-        <input type="number" id="value" placeholder="Value"/>
-    </div>
-    <div class="formBox">
-        <input type="text" id="description" placeholder="Description"/>
-    </div>
-    <div class="formBox">
-        <input type="date" id="date" placeholder="Date"/>
-    </div>
-    
-    
-    <div class="formBox">
-        <button id="btn">Click to Add</button>
-    </div>
-    <div id="msg">
-        <pre></pre>
-    </div>
-</form>
-
-<!-- Scripts -->
-
-<script>
-
-            
-        
-        
-        // LIMPAR ISSO
-        
-        let selectedCategorys = [];
-        const getSelectedCategorys = ()=> {
-            let categorys = document.querySelectorAll('input[type=checkbox]:checked');
-            categorys.forEach((category)=>{
-                selectedCategorys.push(category.value);
-            });
-            // retira as repetições
-            selectedCategorys = [...new Set(selectedCategorys)];
-            return selectedCategorys
-            // limpa o array
-            
-        }
-        
-        let contas = [];
-        const addExpense = (ev)=>{
-            ev.preventDefault(); 
-            selectedCategorys = [];
-            let conta = {
-                id: Date.now(),
-                value: document.getElementById("value").value,
-                description: document.getElementById("description").value,
-                date: document.getElementById("date").value,                
-                category: [...getSelectedCategorys()]
-
-            }
-                
-
-
-            
-
-
-
-
-
-                // ex: conta.category = ['food', 'transport']
-            
-            
-            
-            contas.push(conta);
-            console.log(conta);
-            
-            document.forms[0].reset(); 
-            document.forms[1].reset();
-
-
-            document.querySelector('form').reset();
-        }
-        
-        let pre = document.querySelector('#msg pre');
-            pre.textContent = '\n' + JSON.stringify(contas, '\t', 2);
-
-            // Salvar no armazenamento local
-            localStorage.setItem('Contas', JSON.stringify(contas) );
-
-
-
-        document.addEventListener('DOMContentLoaded', ()=>{
-            document.getElementById('btn').addEventListener('click', addExpense);
-
-        });
-        </script>
-    </body>
-</html>
-
-
 <!-- Page Title -->
 
 <title>CONTROLE DE FINANCAS</title>
 
-<table id="inputTable">
-        <thead>
-            <tr>
-            </tr>
-        </thead>
-        <tbody>
-    </tbody>
-</table>
+<!-- Categories -->
 
-<!-- Table -->
-<table>
-    <thead>
-        <!-- Topics -->
-        <tr> 
-            <th>Value</th>
-            <th>Description</th>
-            <th>Date</th>
-            <th>Category</th>
-        </tr>
-    </thead>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
-    <tbody id="data-output"> <!-- Target from de js file-->
-        <h2>JSON DATA</h2>
-        <p id="data"></p>
-        <script type="text/javascript">
-            fetch('./data.json')
-            .then(function(response) {
+<form action="">
+    <div class="checkbox">
+
+        <input type="checkbox" id="food" name="food" value="food">
+        <label for="food">Food</label>
+
+        <input type="checkbox" id="transport" name="transport" value="transport">
+        <label for="transport">Transport</label>
+
+        <input type="checkbox" id="health" name="health" value="health">
+        <label for="health">Health</label>
+
+        <input type="checkbox" id="education" name="education" value="education">
+        <label for="education">Education</label>
+
+    </div>
+</form>
+
+<!-- User expense information -->
+
+<form>
+    <div class="formBox">
+        <div id="msg">
+
+            <input type="number" id="value" placeholder="Value" />
+
+            <input type="text" id="description" placeholder="Description" />
+
+            <input type="date" id="date" placeholder="Date" />
+
+            <button id="btn">Click to Add</button>
+
+            <pre></pre>
+        </div>
+</form>
+
+
+
+<!-- Scripts -->
+
+<script>
+    // Get selected categories        
+    let selectedCategorys = [];
+    const getSelectedCategorys = () => {
+        let categorys = document.querySelectorAll('input[type=checkbox]:checked');
+        categorys.forEach((category) => {
+            selectedCategorys.push(category.value);
+        });
+        selectedCategorys = [...new Set(selectedCategorys)]; // Remove duplicates
+        return selectedCategorys
+    }
+
+
+    // Add new expense        
+    let contas = [];
+    const addNewExpense = (ev) => {
+        ev.preventDefault();
+        selectedCategorys = []; // Clear categories from previous insertion
+        let conta = {
+            id: Date.now(), // Unique ID
+            value: document.getElementById("value").value,
+            description: document.getElementById("description").value,
+            date: document.getElementById("date").value,
+            category: [...getSelectedCategorys()]
+
+        }
+
+        contas.push(conta); // Add expense to array
+        console.log(conta); // Temporary log
+
+        document.forms[0].reset(); // Reset form
+        document.forms[1].reset(); // Reset form
+
+    }
+
+    localStorage.setItem('Contas', JSON.stringify(contas)); // Saves to local storage
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('btn').addEventListener('click', addNewExpense); // Add new expense
+
+    });
+
+</script>
+</body>
+
+</html>
+
+
+<!-- Serialize data to JSON -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<tbody id="data-output"> <!-- Target from de js file-->
+    <p id="data"></p>
+    <script type="text/javascript">
+        fetch('./data.json')
+            .then(function (response) {
                 return response.json();
             })
-            .then(function(data) {
+            .then(function (data) {
                 for (var i = 0; i < data.length; i++) {
-                    document.getElementById("data").innerHTML += 
-                    data[i].id + "=>" + data[i].value + " " + data[i].description + " " 
-                    + data[i].date + " " + data[i].category + "<br />"
-
-                    // avisa que adicionou um novo item
+                    document.getElementById("data").innerHTML +=
+                        data[i].id + "=>" + data[i].value + " " + data[i].description + " "
+                        + data[i].date + " " + data[i].category + "<br />"
                 }
             })
-
-
-
