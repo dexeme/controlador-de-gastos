@@ -74,11 +74,14 @@
             // retira as repetições
             selectedCategorys = [...new Set(selectedCategorys)];
             return selectedCategorys
+            // limpa o array
             
         }
+        
         let contas = [];
         const addExpense = (ev)=>{
             ev.preventDefault(); 
+            selectedCategorys = [];
             let conta = {
                 id: Date.now(),
                 value: document.getElementById("value").value,
@@ -104,6 +107,9 @@
             console.log(conta);
             
             document.forms[0].reset(); 
+            document.forms[1].reset();
+
+
             document.querySelector('form').reset();
         }
         
@@ -168,14 +174,4 @@
             })
 
 
-
-
-    </tbody>
-
-
-        </h2>
-
-    </tbody>
-
-</table>
 
