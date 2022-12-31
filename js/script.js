@@ -21,6 +21,9 @@ const updateLocalStorage = () => {
 }
 
 
+
+/// Pegar checkbox que está marcado
+
 ///function insertExpenses() {
 ///    var jsonObject = {
  //       "id": $("#inputTable").find("#id").val(),

@@ -11,7 +11,31 @@
 <link rel="icon" href="./favicons/icon-16x16.png">
 <link rel="stylesheet" href="./css/style.css">
 
-<!-- Scripts -->
+
+
+<!-- Categorias -->
+
+<form action="">
+        <div class="checkbox">
+            <input type="checkbox" id="food" name="food" value="food">
+            <label for="food">Food</label>
+            
+            <input type="checkbox" id="transport" name="transport" value="transport">
+            <label for="transport">Transport</label>
+
+            <input type="checkbox" id="health" name="health" value="health">
+            <label for="health">Health</label>
+
+            <input type="checkbox" id="education" name="education" value="education">
+            <label for="education">Education</label>
+
+
+
+        </div>
+</form>
+
+<!-- Inserir nova despesa -->
+
 <form>
     <div class="formBox">
         <input type="number" id="value" placeholder="Value"/>
@@ -22,11 +46,8 @@
     <div class="formBox">
         <input type="date" id="date" placeholder="Date"/>
     </div>
-    <div class="formBox">
-        <input type="text" id="category" placeholder="Category"/>
-    </div>
     
-
+    
     <div class="formBox">
         <button id="btn">Click to Add</button>
     </div>
@@ -35,130 +56,126 @@
     </div>
 </form>
 
-<script>
-        let contas = [];
+<!-- Scripts -->
 
+<script>
+
+            
+        
+        
+        // LIMPAR ISSO
+        
+        let selectedCategorys = [];
+        const getSelectedCategorys = ()=> {
+            let categorys = document.querySelectorAll('input[type=checkbox]:checked');
+            categorys.forEach((category)=>{
+                selectedCategorys.push(category.value);
+            });
+            // retira as repetições
+            selectedCategorys = [...new Set(selectedCategorys)];
+            return selectedCategorys
+            
+        }
+        let contas = [];
         const addExpense = (ev)=>{
             ev.preventDefault(); 
             let conta = {
                 id: Date.now(),
                 value: document.getElementById("value").value,
                 description: document.getElementById("description").value,
-                date: document.getElementById("date").value,
-                category: document.getElementById("category").value 
+                date: document.getElementById("date").value,                
+                category: [...getSelectedCategorys()]
+
             }
+                
+
+
+            
+
+
+
+
+
+                // ex: conta.category = ['food', 'transport']
+            
+            
+            
             contas.push(conta);
+            console.log(conta);
+            
             document.forms[0].reset(); 
             document.querySelector('form').reset();
-
-            console.warn('added' , {contas} );
-            let pre = document.querySelector('#msg pre');
+        }
+        
+        let pre = document.querySelector('#msg pre');
             pre.textContent = '\n' + JSON.stringify(contas, '\t', 2);
 
             // Salvar no armazenamento local
             localStorage.setItem('Contas', JSON.stringify(contas) );
-        }
+
+
+
         document.addEventListener('DOMContentLoaded', ()=>{
             document.getElementById('btn').addEventListener('click', addExpense);
+
         });
-    </script>
-</body>
+        </script>
+    </body>
 </html>
 
-</script>
+
 <!-- Page Title -->
 
 <title>CONTROLE DE FINANCAS</title>
 
-<!-- Inserir nova despesa -->
-    <table id="inputTable">
+<table id="inputTable">
         <thead>
             <tr>
-                <th>Value</th>
-                <th>Description</th>
-                <th>Date</th>
-                <th>Category</th>
-
-                </th>
             </tr>
         </thead>
         <tbody>
-            <tr>
+    </tbody>
+</table>
 
-                    <script type="text/javascript">
+<!-- Table -->
+<table>
+    <thead>
+        <!-- Topics -->
+        <tr> 
+            <th>Value</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+    <tbody id="data-output"> <!-- Target from de js file-->
+        <h2>JSON DATA</h2>
+        <p id="data"></p>
+        <script type="text/javascript">
+            fetch('./data.json')
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                for (var i = 0; i < data.length; i++) {
+                    document.getElementById("data").innerHTML += 
+                    data[i].id + "=>" + data[i].value + " " + data[i].description + " " 
+                    + data[i].date + " " + data[i].category + "<br />"
 
-                        function addObj() {
-                            
-                            let data = JSON.stringify(atual); 
-                            let atual = JSON.parse(data); 
-                            let newObj = {
-                                value: document.getElementById("value").value,
-                                description: document.getElementById("description").value,
-                                date: document.getElementById("date").value,
-                                category: document.getElementById("category").value 
-                            };
-                            if (newObj.value == "" || newObj.description == "" || newObj.date == "" || newObj.category == "") {
-                                alert("Please fill all the fields");
-                                return;
-                            }
-                            if (localStorage.getItem("data") == null) {
-                                let data = [];
-                                data.push(newObj);
-                                localStorage.setItem("data", JSON.stringify(data));
-                                return;
-                            }
-                            
-                            
-                            
-                            atual.push(newObj); 
-                            console.log(atual) 
-
-                            
-
-                        }
-                </script>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- Table -->
-    <table>
-        <thead>
-            <!-- Topics -->
-            <tr> 
-                <th>Value</th>
-                <th>Description</th>
-                <th>Date</th>
-                <th>Category</th>
-            </tr>
-        </thead>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
-        <tbody id="data-output"> <!-- Target from de js file-->
-            <h2>JSON DATA</h2>
-            <p id="data"></p>
-            <script type="text/javascript">
-                fetch('./data.json')
-                .then(function(response) {
-                    return response.json()
-                }) 
-                .then(function(data) {
-                    for (var i = 0; i < data.length; i++) {
-                        document.getElementById("data").innerHTML += 
-                        data[i].id + "=>" + data[i].value + " " + data[i].description + " " 
-                        + data[i].date + " " + data[i].category + "<br />"
-                    }
-                })
+                    // avisa que adicionou um novo item
+                }
+            })
 
 
 
-            </script>
-        </tbody>
+
+    </tbody>
 
 
-            </h2>
+        </h2>
 
-        </tbody>
+    </tbody>
 
-    </table>
+</table>
 
-    <script src="script.js"></script>
