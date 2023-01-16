@@ -1,9 +1,9 @@
 Todo list 
-- [ ] 1. Shows expenses in a table
+- [x] 1. Shows expenses in a table
 - [ ] 2. Option to insert new category
 - [ ] 3. Option to delete category  
 - [ ] 4. Data Persistence
-- [ ] 5. Option to insert new expense
+- [x] 5. Option to insert new expense
 - [ ] 6. Option to delete expense
 - [ ] 7. Option to edit expense
 - [ ] 8. Option to filter expenses by category

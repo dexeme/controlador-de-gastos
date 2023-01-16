@@ -10,8 +10,11 @@
 
 <!-- Links -->
 
+<script data-main="./src/scripts/main" src="./src/scripts/require.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <link rel="icon" href="./favicons/icon-16x16.png">
-<link rel="stylesheet" href="./css/style.css">
+<link rel="stylesheet" href="./src/style/css/style.css">
 
 <!-- Page Title -->
 
@@ -55,14 +58,52 @@
         </div>
 </form>
 
+<!-- Table -->
+<!-- Insert data into a table -->>
 
 
-<!-- Scripts -->
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Value</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+    <tbody id="data-output"></tbody>
+</table>
 
-<script>
-    // Get selected categories        
+<!-- Data Table -->
+
+<script type="text/javascript">
+
+    // Update the expense table
+    const updateTable = (contas) => { 
+        document.getElementById('data-output').innerHTML = ''; // Clear previous table, for avoiding duplicates
+
+        for (let conta of contas) { 
+            let row = document.createElement('tr');
+            row.innerHTML = `
+            <td>${conta.id}</td>
+            <td>${conta.value}</td>
+            <td>${conta.description}</td>
+            <td>${conta.date}</td>
+            <td>${conta.category}</td>
+            `;
+            document.getElementById('data-output').appendChild(row); // Add row to table
+        }
+
+    }
+
+</script>
+
+
+<script type="text/javascript">
+        
     let selectedCategorys = [];
-    const getSelectedCategorys = () => {
+    const getSelectedCategorys = () => { // Get selected categories    
         let categorys = document.querySelectorAll('input[type=checkbox]:checked');
         categorys.forEach((category) => {
             selectedCategorys.push(category.value);
@@ -72,29 +113,44 @@
     }
 
 
-    // Add new expense        
+          
     let contas = [];
-    const addNewExpense = (ev) => {
+    const addNewExpense = (ev) => { // Add new expense  
         ev.preventDefault();
         selectedCategorys = []; // Clear categories from previous insertion
-        let conta = {
+        const conta = {
             id: Date.now(), // Unique ID
             value: document.getElementById("value").value,
             description: document.getElementById("description").value,
             date: document.getElementById("date").value,
             category: [...getSelectedCategorys()]
-
         }
 
         contas.push(conta); // Add expense to array
         console.log(conta); // Temporary log
+        localStorage.setItem('Contas', JSON.stringify(contas)); // Saves to local storage
+        updateTable(contas); // Pass the array to the table
+
 
         document.forms[0].reset(); // Reset form
         document.forms[1].reset(); // Reset form
+        var contaString = JSON.stringify(contas); // Convert to string
+        var contaJSON = JSON.parse(contaString); // Convert to JSON
 
+        // FIX IT LATER
+        // Add to pre-existent file (data.json) using jQuery
+        $.ajax({
+            url: './data.json',
+            type: 'post',
+            data: contaJSON,
+            success: function (data) {
+                console.log("Data inserted!");
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
     }
-
-    localStorage.setItem('Contas', JSON.stringify(contas)); // Saves to local storage
 
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -106,22 +162,3 @@
 </body>
 
 </html>
-
-
-<!-- Serialize data to JSON -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<tbody id="data-output"> <!-- Target from de js file-->
-    <p id="data"></p>
-    <script type="text/javascript">
-        fetch('./data.json')
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                for (var i = 0; i < data.length; i++) {
-                    document.getElementById("data").innerHTML +=
-                        data[i].id + "=>" + data[i].value + " " + data[i].description + " "
-                        + data[i].date + " " + data[i].category + "<br />"
-                }
-            })

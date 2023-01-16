@@ -1,1 +1,16 @@
-
+[
+    {
+        "id": 100100100,
+        "value": 100,
+        "date": "2019-01-01",
+        "description": "test",
+        "category": "test"
+    },
+    {
+        "id": "100100101",
+        "value": 100,
+        "date": "2019-01-01",
+        "description": "test",
+        "category": "test"
+    }
+]
